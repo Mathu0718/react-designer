@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as fabric from 'fabric';
 import QRCode from 'qrcode';
+import FabricCatalog from './components/FabricCatalog';
 import './App.css';
 
 /* ───── constants ───── */
@@ -74,7 +75,7 @@ function tintImage(img, hexColor) {
   return out.toDataURL('image/png');
 }
 
-export default function App() {
+export function TShirtDesigner() {
   /* refs */
   const canvasEl = useRef(null);
   const fc = useRef(null);
@@ -729,5 +730,30 @@ export default function App() {
         <button className="btn" onClick={downloadDesign}>{ICO.download} Download Preview</button>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  const [appMode, setAppMode] = useState('fabric'); // 'tshirt' or 'fabric'
+
+  return (
+    <>
+      <div style={{ background: '#1e293b', padding: '10px 20px', display: 'flex', gap: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', alignItems: 'center' }}>
+         <div style={{ color: '#fff', fontWeight: 800, marginRight: '20px' }}>App Nav:</div>
+         <button 
+            style={{ background: 'none', border: 'none', color: appMode === 'tshirt' ? '#3b82f6' : '#94a3b8', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }} 
+            onClick={() => setAppMode('tshirt')}
+         >
+            T-Shirt Designer
+         </button>
+         <button 
+            style={{ background: 'none', border: 'none', color: appMode === 'fabric' ? '#3b82f6' : '#94a3b8', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' }} 
+            onClick={() => setAppMode('fabric')}
+         >
+            Fabric Designer
+         </button>
+      </div>
+      {appMode === 'tshirt' ? <TShirtDesigner /> : <FabricCatalog />}
+    </>
   );
 }
